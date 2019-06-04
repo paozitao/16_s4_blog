@@ -1,0 +1,7 @@
+[DATABASE]
+databaseType=mysql
+ip=127.0.0.1
+database=16_s4_blog
+username=root
+password=kazusa
+port=3306

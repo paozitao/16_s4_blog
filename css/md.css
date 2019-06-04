@@ -1,0 +1,16 @@
+#detail{
+    height: 500px;
+    width: 100%;
+    font-size: 0.7rem;
+}
+/*#detail textarea{*/
+    /*color: #4afcff;*/
+    /*background-color: white;*/
+/*}*/
+#md{
+    overflow:scroll;
+    height: 500px;
+    border: solid 1px darkgrey;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}

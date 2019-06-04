@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="../src/pic/favicon.ico">
+    <title>白荷</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/cssmain.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+<img src="../src/pic/bg.png" class="bg1">
+<div class="container" style="width: 50%;height: 100%">
+    <div class="bg2"></div>
+    <div class="row getmagin"><div class="col-lg-12 text-center"><h2 class="text-primary">注册</h2></div> </div>
+    <form class="form-horizontal" action="register.jsp" onsubmit="return check()">
+        <div class="form-group">
+            <label class="col-lg-4 control-label">请输入您的邮箱</label>
+            <div class="col-lg-6 input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope-square fa-fw"></i></span>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                <span class="input-group-addon hidden" id="message"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-4 control-label">请输入您的昵称</label>
+            <div class="col-lg-6 input-group">
+                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                <input type="text" class="form-control" id="user_name" name="user_name" placeholder="昵称">
+                <span class="input-group-addon hidden" id="message4"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">请输入您的密码</label>
+            <div class="col-sm-6 input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="密码">
+                <span class="input-group-addon hidden" id="message2"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">请再次输入您的密码</label>
+            <div class="col-sm-6 input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input type="password" class="form-control" id="repwd" name="repwd" placeholder="确认密码">
+                <span class="input-group-addon hidden" id="message3"></span>
+            </div>
+        </div>
+        <!--<div class="form-group">-->
+            <!--<div class="input-group col-sm-12 text-center">-->
+                <!--<input type="submit" class="btn btn-info" id="register" value="注册">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
+            <div class="input-group margin-bottom-sm col-sm-offset-5 ">
+                <span class="input-group-addon"><i class="fa fa-sign-in fa-fw"></i></span>
+                <input class="btn btn-info" type="submit" id="register" value="注册">
+            </div>
+
+        </div>
+    </form>
+    <!--<div class="row">-->
+        <!--<div class="col-sm-12 text-center ">-->
+            <!--<button id="register" class="btn btn-primary"><i class="fa fa-sign-in"></i>注册</button>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="row center-block hidden"  id="alert" style="margin-top:8%">
+        <div class="col-sm-1"></div>
+        <div class="alert alert-danger alert-dismissible col-sm-10 " role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">不再提示<span aria-hidden="true">&times;</span></button>
+            <strong>两次密码不一致</strong>
+        </div>
+    </div>
+</div>
+<script>
+    function check(){
+        if(($('#repwd').val()=='')){
+            $('#message2').removeClass('hidden')
+            $('#message2').html("不能为空")
+
+            $('#register').addClass('disabled')
+            return false
+        }
+        if(($('#pwd').val()=='')){
+            $('#message3').removeClass('hidden')
+            $('#message3').html("不能为空")
+        }
+        if(($('#user_name').val()=='')){
+            $('#message4').removeClass('hidden')
+            $('#message4').html("不能为空")
+        }
+        if(($('#repwd').val()!=$('#pwd').val())){
+            $('#alert').removeClass('hidden')
+            return false
+        }
+    }
+    $('#email').on("blur",function(){
+        var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+        if(($('#email').val()!='')){
+            if(!reg.test($('#email').val())){
+                $('#message').removeClass('hidden')
+                $('#message').html("请输入正确的邮箱格式")
+            }else{
+                $.post("checkEmail.jsp?email="+$('#email').val(),function (data) {
+                    if(data.trim()=="true"){
+                        $('#message').removeClass('hidden')
+                        $('#message').html("此邮箱已被注册")
+                        $('#register').addClass('disabled')
+                        $('#register').attr('disabled',true);
+                        return false
+                    }else{
+                        $('#message').removeClass('hidden')
+                        $('#message').html("√")
+                        $('#register').removeClass('disabled')
+                        $('#register').attr('disabled',false);
+                    }
+                })
+            }
+        }else{
+            $('#message').addClass('hidden')
+        }
+    })
+</script>
+</body>
+</html>

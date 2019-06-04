@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="src/pic/favicon.ico">
+    <title>白荷</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cssmain.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+    <img src="src/pic/bg.png" class="bg1">
+    <div class="to-top">
+        <a href="#"><i class="fa fa-arrow-circle-up fa-5x"></i></a>
+    </div>
+<div class="container" style="width: 50%;height: 100%">
+    <div class="bg2"></div>
+    <div class="row getmagin"><div class="col-lg-12 text-center"><h2 class="text-primary">呦！今天有空来写东西了？</h2></div> </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Name</label>
+            <div class="col-lg-10 input-group">
+                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                <input type="text" class="form-control" id="name" placeholder="Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10 input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input type="password" class="form-control" id="pwd" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="remember"> Remember me
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-sm-12 text-center">
+        <button id="login" class="btn btn-primary">登录</button>
+    </div>
+    <div class="row center-block hidden"  id="alert" style="margin-top:8%">
+        <div class="col-sm-1"></div>
+        <div class="alert alert-danger alert-dismissible col-sm-10 " role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">不再提示<span aria-hidden="true">&times;</span></button>
+            <strong>账号或密码错误，请重试</strong>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        if($.cookie('remember')=='true'){
+            $('#name').val($.cookie('un'))
+            $('#pwd').val($.cookie('pwd'))
+            $('#remember').attr("checked", true)
+        }
+    })
+    $('#login').click(
+        function () {
+            $.post("manage/check.jsp?name="+$('#name').val()+"&pwd="+$('#pwd').val(),function (data) {
+                if(data.trim()=="true"){
+                    if($('#remember').val()=="on"){
+                        $.cookie('remember', 'true', { expires: 7, path: window.location.href })
+                        $.cookie('un',$('#name').val(),{ expires: 7, path: window.location.href })
+                        $.cookie('pwd',$('#pwd').val(),{ expires: 7, path: window.location.href})
+                    }
+                    window.location.href="manage/manage.jsp"
+                }else{
+                    $('#alert').removeClass('hidden')
+                }
+            })
+        }
+    )
+</script>
+</body>
+</html>
