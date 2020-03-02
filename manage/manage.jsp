@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="database.DatabaseUtil,java.sql.*,java.text.*" %>
 <%
     if(session.getAttribute("16_s4_admin")==null){
@@ -119,7 +119,7 @@
     $('#public').click(function () {
         if(confirm("是否发布？")){
             var name = $('#name').val()
-            var detail = $('#detail').val()
+            var detail = encodeURIComponent($('#detail').val())
             var title = $('#title').val()
             var flag = 0;
             var url = "../blog/public.jsp?name="+name+"&detail="+detail+"&title="+title+"&id="+current_id
@@ -138,7 +138,7 @@
     $('#save').click(function () {
         if(confirm("是否保存？")){
             var name = $('#name').val()
-            var detail = $('#detail').val()
+            var detail = encodeURIComponent($('#detail').val())
             var title = $('#title').val()
             var flag=0;
             var url = "../blog/save.jsp?name="+name+"&title="+title+"&id="+current_id+"&detail="+detail;

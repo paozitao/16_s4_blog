@@ -64,7 +64,6 @@
 <%
 }
     %>
-         <p class="navbar-text navbar-right "><a href="admin.html" class="navbar-link hvr-underline-from-center"><i class="fa fa-sign-in fa-x2"></i>管理员登录</a></p>
         <form class="navbar-form navbar-right" name="search" action="blog/searchn.jsp">
             <div class="form-group">
                 <input type="text" class="form-control " placeholder="标题" id="blogName" name="blogName">

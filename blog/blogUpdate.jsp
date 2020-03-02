@@ -1,7 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="database.DatabaseUtil,java.sql.*,java.text.*" %>
 <%
-	if(session.getAttribute("16_s4_admin")==null){
+    if(session.getAttribute("16_s4_admin")==null){
 %>
 <script>
     history.back();
@@ -69,27 +69,48 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+    <%
+        String id = request.getParameter("id");
+        String sql = "select * from 16_s4_blog where blog_id="+id;
+        ResultSet rs = (new DatabaseUtil()).executeQuery(sql);
+        if(rs.next()){
+        Timestamp timestamp2 = rs.getTimestamp("create_time");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(timestamp2);
+        String title = rs.getString("title");
+        String name = rs.getString("name");
+        String detail = rs.getString("detail");
+%>
+<script type="text/javascript">
+    var current_id = <%=rs.getInt("blog_id")%>;
+</script>
+
     <div class="row text-center"><h2 id="massage">写点啥吧</h2></div>
     <form class="form-horizontal" name="frm" action="/blog">
         <div class="form-group text-center">
-            <label class="col-lg-3 control-label text-center">标题</label>
+            <label class="col-lg-3 control-label text-center"></label>
             <div class="col-lg-3 text-center">
                 <input type="text" class="form-control" id="name" name="name" placeholder="标题">
             </div>
         </div>
         <div class="form-group text-center">
-            <label class="col-sm-3 control-label text-center">标签</label>
+            <label class="col-sm-3 control-label text-center"></label>
             <div class="col-sm-3 text-center">
                 <input type="text" class="form-control" name="pwd" id="title" placeholder="博文的标签">
             </div>
         </div><br>
-        <h4 class="col-lg-6 text-center">正文</h4>
-        <h4 class="col-lg-6 text-center">Markdown效果</h4>
+        <script type="text/javascript">
+            $('#name').val("<%=rs.getString("name")%>");
+            $('#title').val("<%=rs.getString("title")%>");
+        </script>
+        <h4 class="col-lg-6 text-center"></h4>
+        <h4 class="col-lg-6 text-center"></h4>
         <div class="form-group">
             <div class="col-lg-6 text-center">
-                <textarea name="detail" id="detail" placeholder="开始我们的date吧！" ></textarea>
+                <textarea name="detail" id="detail" placeholder="开始我们的date吧！" ><%=detail%></textarea>
             </div>
             <div class="col-lg-6" id="md">
+                <%=detail%>
             </div>
         </div>
         <div class="form-group">
@@ -103,7 +124,7 @@
                 <a type="button" class="btn btn-danger" id="delete">删除</a>
             </div>
             <div class="col-sm-3 text-center">
-                <a type="button" class="btn btn-info" id="public">发布</a>
+                <a type="button" class="btn btn-info" id="public">修改并发布</a>
             </div>
         </div>
     </form>
@@ -127,7 +148,7 @@
             $('#title').val("");
             $('#massage').text("写新博文");
             current_id=0;
-            $.get("/blog/blog/blogChange.jsp?id="+current_id+"&statu="+(-1),function(){
+            $.get("blogChange.jsp?id="+current_id+"&statu="+(-1),function(){
                 alert("删除成功！")
             })
         }
@@ -136,18 +157,19 @@
     })
     //发布到博客中
     $('#public').click(function () {
-        if(confirm("是否发布？")){
+        if(confirm("是否修改？")){
             var name = $('#name').val()
-            var detail = $('#detail').val()
+            var detail = encodeURIComponent($('#detail').val())
             var title = $('#title').val()
             var flag = 0;
-            var url = "/blog/blog/public.jsp?name="+name+"&detail="+detail+"&title="+title+"&id="+current_id
+            var url = "blogDetail.jsp?name="+name+"&detail="+detail+"&title="+title+"&id="+current_id
             $.get(url,function () {
-                flag=1
-                alert("发布成功！");
-            })
-            if(flag==0){
-                alert("发布失败，找找bug！");}
+                flag=1;
+                alert("修改成功！");
+            }).fail(function(){
+        alert("修改错误！");
+        }
+         );
         }
 
     })
@@ -155,10 +177,10 @@
     $('#save').click(function () {
         if(confirm("是否保存？")){
             var name = $('#name').val()
-            var detail = $('#detail').val()
+            var detail = encodeURIComponent($('#detail').val())
             var title = $('#title').val()
             var flag=0;
-            var url = "/blog/blog/save.jsp?name="+name+"&detail="+detail+"&title="+title+"&id="+current_id;
+            var url = "save.jsp?name="+name+"&detail="+detail+"&title="+title+"&id="+current_id;
             $.get(url,function () {
                 alert("保存成功！")
                 flag=1
@@ -183,28 +205,12 @@
             $('#public').removeClass("disabled")
         }
     })
-    $(document).ready(function(){
-        // alert("12")
-    });
+    window.onload = function(){
+        $('#md').html(marked($('#md').html()));
+    }
 </script>
 </body>
-<%
-    String id = request.getParameter("id");
-String sql = "select * from 16_s4_blog where blog_id="+id;
-ResultSet rs = (new DatabaseUtil()).executeQuery(sql);
-if(rs.next()){
-Timestamp timestamp2 = rs.getTimestamp("create_time");
-SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-String time = sdf.format(timestamp2);
-%>
-<script type="text/javascript">
-    var current_id = <%=rs.getInt("blog_id")%>;
-    $('#name').val("<%=rs.getString("name")%>");
-    $('#detail').val("<%=rs.getString("detail")%>");
-    $('#md').html(marked("<%=rs.getString("detail")%>"));
-    $('#title').val("<%=rs.getString("title")%>");
-    $('#massage').text("创建日期：<%=time%>");
-</script>
+</html>
 <%
 }else{
 %>
@@ -215,4 +221,3 @@ String time = sdf.format(timestamp2);
 }
 }
 %>
-</html>

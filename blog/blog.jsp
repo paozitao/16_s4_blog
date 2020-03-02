@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" %>
     <%@ page import="database.DatabaseUtil,java.sql.*,java.util.*,java.text.*" %>
         <%
     DatabaseUtil dbUtil = new DatabaseUtil();
@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/css/mdui.min.css">
     <script src="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/marked.min.js"></script>
+    <link rel="stylesheet" href="../css/md.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/hover.css/2.3.1/css/hover-min.css" rel="stylesheet">
     </head>
@@ -98,7 +100,6 @@
     </ul>
     </div>
     </nav>
-
         <%
             rs = dbUtil.executeQuery(sql);
             if(rs.next()){
@@ -112,7 +113,6 @@
             String review = rs.getString("review_count");
             sql2 = "update 16_s4_blog set browse_count = 1+ "+browse+" where blog_id =" + id;
             dbUtil.executeUpdate(sql2);
-
 %>
     <div class="container " STYLE="width: 50%">
     <div class="col-sm-12 bg-white mdui-typo caption">
@@ -141,19 +141,20 @@
     <div class="mdui-typo">
     <hr/>
     </div>
-    <div class="mdui-typo">
-    <blockquote>
-    <p>无论走到哪里，都应该记住，过去都是假的，回忆是一条没有尽头的路，一切以往的春天都不复存在，就连那最坚韧而又狂乱的爱情归根结底也不过是一种转瞬即逝的现实。</p>
-    <footer>马尔克斯 ——《百年孤独》</footer>
-    </blockquote>
-    </div>
     <div class="row">
-    <article class="col-lg-12 detail" ><%=detail%></article>
+        <div class="col-lg-12" id="md"><%=detail%>
+        </div>
     </div>
     <div class="mdui-typo">
     <hr/>
     </div>
     <div class="row">
+    <div class="mdui-typo">
+    <blockquote>
+    <p>梦中不觉秋已深，余情岂是为他人</p>
+    <footer>白色相簿2</footer>
+    </blockquote>
+    </div>
     <div class="col-sm-12 text-center" style="margin-bottom: 2%">
     <a class="btn" id="like">
     <i class="fa fa-heart fa-lg"></i>点赞</a>
@@ -238,7 +239,10 @@
     </div>
     </body>
     <script>
-    var current_id =<%=id%>
+        window.onload = function(){
+            $('#md').html(marked($('#md').html()));
+        }
+    var current_id =<%=id%>;
     var inst = new mdui.Headroom('#banner');
     $(".to-top").click(function(){
     $('body,html').animate({scrollTop:0},300);
