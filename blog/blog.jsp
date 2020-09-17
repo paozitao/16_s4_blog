@@ -142,7 +142,7 @@
     <hr/>
     </div>
     <div class="row">
-        <div class="col-lg-12" id="md"><%=detail%>
+        <div class="col-lg-12" id="blog_md"><%=detail%>
         </div>
     </div>
     <div class="mdui-typo">
@@ -240,7 +240,7 @@
     </body>
     <script>
         window.onload = function(){
-            $('#md').html(marked($('#md').html()));
+            $('#blog_md').html(marked($('#blog_md').html()));
         }
     var current_id =<%=id%>;
     var inst = new mdui.Headroom('#banner');

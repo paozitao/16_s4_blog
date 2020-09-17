@@ -1,7 +1,7 @@
 #detail{
     height: 500px;
     width: 100%;
-    font-size: 0.7rem;
+    font-size: 0.5rem;
 }
 /*#detail textarea{*/
     /*color: #4afcff;*/
@@ -12,5 +12,10 @@
     height: 500px;
     border: solid 1px darkgrey;
     border-radius: 5px;
-    font-size: 0.9rem;
+    font-size: 0.5rem;
+}
+
+#blog_md{
+    border-radius: 5px;
+    font-size: 0.5rem;
 }
